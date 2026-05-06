@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>MiguelAngel_45 — Streamer & Developer</title>
+  <link rel="icon" type="image/png" href="favicon.png" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,100..900&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -224,6 +225,13 @@
       line-height: .95;
       letter-spacing: -4px;
       color: #fff;
+      margin-bottom: 1.6rem;
+      opacity: 0;
+      animation: fade-up 1s var(--ease-out) .6s forwards;
+    }
+    .hero-banner-img {
+      width: min(680px, 90vw);
+      height: auto;
       margin-bottom: 1.6rem;
       opacity: 0;
       animation: fade-up 1s var(--ease-out) .6s forwards;
@@ -506,6 +514,11 @@
       margin-bottom: 1.2rem;
     }
 
+    .cuervo-banner-img {
+      width: min(620px, 88vw);
+      height: auto;
+      margin-bottom: 1.6rem;
+    }
     .cuervo-title {
       font-size: clamp(3.5rem, 9vw, 7rem);
       font-weight: 800;
@@ -680,7 +693,7 @@
 
   <!-- ── NAV ── -->
   <nav id="main-nav">
-    <a href="#hero" class="nav-logo">Miguel<span>Angel</span>_45</a>
+    <a href="#hero" class="nav-logo"><img src="nav-logo.svg" alt="MiguelAngel_45" style="height:56px;width:auto;display:block;"></a>
     <button class="nav-hamburger" id="nav-toggle" aria-label="Abrir menú">
       <span></span><span></span><span></span>
     </button>
@@ -701,7 +714,7 @@
 
     <div class="hero-content">
       <p class="hero-eyebrow">Streamer &amp; Developer</p>
-      <h1 class="hero-title">Miguel<span class="grad">Angel</span><br>_45</h1>
+      <img src="bot-banner-degradado.png" alt="MiguelAngel_45" class="hero-banner-img">
       <p class="hero-sub">Streams en vivo, contenido gamer y proyectos de software.<br>Bienvenido a mi espacio digital.</p>
       <div class="hero-actions">
         <a href="#twitch" class="btn btn-primary">
@@ -770,7 +783,7 @@
           <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
           Aplicación
         </p>
-        <h2 class="cuervo-title cv cv-h2">Cuervo<span class="grad">Bot</span></h2>
+        <img src="cuervobot-banner-degradado.png" alt="CuervoBot" class="cuervo-banner-img cv cv-h2">
         <p class="cuervo-desc cv cv-desc">
           Bot personalizado para Twitch que automatiza la interacción con tu audiencia. Gestiona comandos, lanza alertas, responde a eventos del canal — todo desde una app de escritorio hecha a medida.
         </p>
@@ -842,10 +855,10 @@
         <h2 class="display ri">Con<span class="grad">tacto</span></h2>
         <div class="glow-rule ri"></div>
         <p class="body-copy ri">¿Colaboraciones, preguntas sobre CuervoBot o simplemente quieres saludar? Déjame un mensaje y te respondo pronto.</p>
-        <form class="contact-form ri" onsubmit="handleSubmit(event)">
-          <input type="text"  placeholder="Tu nombre"    required />
-          <input type="email" placeholder="Tu email"     required />
-          <textarea           placeholder="Tu mensaje…"  required></textarea>
+        <form class="contact-form ri" action="https://formspree.io/f/mqenblyr" method="POST">
+          <input type="text"  name="name"    placeholder="Tu nombre"    required />
+          <input type="email" name="email"   placeholder="Tu email"     required />
+          <textarea           name="message" placeholder="Tu mensaje…"  required></textarea>
           <button type="submit" class="btn btn-primary" style="align-self:flex-start; border:none; cursor:pointer;">
             Enviar mensaje →
           </button>
@@ -968,21 +981,6 @@
       };
       document.body.appendChild(script);
     })();
-
-    // ── Contact form feedback ──
-    function handleSubmit(e) {
-      e.preventDefault();
-      const btn = e.target.querySelector('button[type="submit"]');
-      btn.textContent  = '¡Enviado! ✓';
-      btn.style.background = '#1a9e6e';
-      btn.disabled = true;
-      setTimeout(() => {
-        btn.textContent  = 'Enviar mensaje →';
-        btn.style.background = '';
-        btn.disabled = false;
-        e.target.reset();
-      }, 3000);
-    }
   </script>
 
   <script>
