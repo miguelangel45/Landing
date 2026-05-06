@@ -899,7 +899,9 @@
     function updateCuervo() {
       const rect     = cuervoBotTrack.getBoundingClientRect();
       const progress = Math.max(0, Math.min(1, -rect.top / (rect.height - window.innerHeight)));
-      if (progress > 0.04) cuervoBotSection.classList.add('active');
+      if (progress > 0.04 || (rect.top <= 10 && rect.bottom > 0)) {
+        cuervoBotSection.classList.add('active');
+      }
     }
     window.addEventListener('scroll', updateCuervo, { passive: true });
     updateCuervo();
