@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MiguelAngel_45 — Streamer & Developer</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,100..900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --purple:       #9146FF;
+      --purple-light: #b87fff;
+      --cyan:         #00F0FF;
+      --bg:           #0e0e14;
+      --text:         #f5f5f7;
+      --muted:        rgba(255,255,255,.52);
+      --ease-out:     cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ════════════════════════════════
+       NAV
+    ════════════════════════════════ */
+    nav {
+      position: fixed;
+      top: 0; left: 0; width: 100%;
+      z-index: 1000;
+      height: 52px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2.5rem;
+      transition: background .5s, backdrop-filter .5s;
+    }
+
+    nav.scrolled {
+      background: rgba(0,0,0,.72);
+      backdrop-filter: saturate(180%) blur(20px);
+      -webkit-backdrop-filter: saturate(180%) blur(20px);
+      border-bottom: 1px solid rgba(255,255,255,.06);
+    }
+
+    .nav-logo {
+      font-size: 1.15rem;
+      font-weight: 700;
+      letter-spacing: -.5px;
+      color: #fff;
+      text-decoration: none;
+    }
+    .nav-logo span { color: var(--purple-light); }
+
+    nav ul { list-style: none; display: flex; gap: 2rem; }
+    nav ul a {
+      color: rgba(255,255,255,.6);
+      text-decoration: none;
+      font-size: .84rem;
+      font-weight: 400;
+      transition: color .2s;
+    }
+    nav ul a:hover { color: #fff; }
+
+    /* ════════════════════════════════
+       BUTTONS
+    ════════════════════════════════ */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      padding: .72rem 1.8rem;
+      border-radius: 980px;
+      font-size: .9rem;
+      font-weight: 500;
+      font-family: inherit;
+      text-decoration: none;
+      cursor: pointer;
+      border: none;
+      transition: all .35s var(--ease-out);
+      letter-spacing: -.1px;
+    }
+
+    .btn-primary {
+      background: var(--purple);
+      color: #fff;
+    }
+    .btn-primary:hover {
+      background: var(--purple-light);
+      transform: scale(1.04);
+      box-shadow: 0 0 50px rgba(145,70,255,.55);
+    }
+
+    .btn-glass {
+      background: rgba(255,255,255,.07);
+      color: #fff;
+      border: 1px solid rgba(255,255,255,.14);
+      backdrop-filter: blur(10px);
+    }
+    .btn-glass:hover {
+      background: rgba(255,255,255,.13);
+      transform: scale(1.04);
+    }
+
+    .btn-disabled {
+      background: rgba(255,255,255,.04);
+      color: rgba(255,255,255,.28);
+      border: 1px dashed rgba(255,255,255,.14);
+      cursor: not-allowed;
+      border-radius: 12px;
+    }
+
+    /* ════════════════════════════════
+       HERO
+    ════════════════════════════════ */
+    #hero {
+      position: relative;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      background: #000;
+    }
+
+    #hero-bg {
+      position: absolute;
+      inset: -12%;
+      background-image: url('https://images.unsplash.com/photo-1614854262318-831574f15f1f?w=1800&q=80');
+      background-size: cover;
+      background-position: center;
+      opacity: .52;
+      animation: hero-breathe 18s ease-in-out infinite alternate;
+    }
+    @keyframes hero-breathe {
+      from { transform: scale(1.04); }
+      to   { transform: scale(1.12); }
+    }
+
+    #hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 80% 60% at 50% 40%, rgba(60,10,120,.4) 0%, rgba(8,6,18,.72) 70%);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      padding: 0 2rem;
+    }
+
+    .hero-eyebrow {
+      font-size: .72rem;
+      font-weight: 600;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--purple-light);
+      margin-bottom: 1.4rem;
+      opacity: 0;
+      animation: fade-up .8s var(--ease-out) .4s forwards;
+    }
+
+    .hero-title {
+      font-size: clamp(4rem, 11vw, 9rem);
+      font-weight: 800;
+      line-height: .95;
+      letter-spacing: -4px;
+      color: #fff;
+      margin-bottom: 1.6rem;
+      opacity: 0;
+      animation: fade-up 1s var(--ease-out) .6s forwards;
+    }
+
+    .grad {
+      background: linear-gradient(135deg, var(--purple-light) 0%, var(--cyan) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-sub {
+      font-size: clamp(.95rem, 2vw, 1.2rem);
+      font-weight: 300;
+      color: rgba(255,255,255,.55);
+      max-width: 520px;
+      margin: 0 auto 2.8rem;
+      line-height: 1.7;
+      opacity: 0;
+      animation: fade-up .9s var(--ease-out) .8s forwards;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: .9rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      opacity: 0;
+      animation: fade-up .9s var(--ease-out) 1s forwards;
+    }
+
+    @keyframes fade-up {
+      from { opacity: 0; transform: translateY(28px); }
+      to   { opacity: 1; transform: none; }
+    }
+
+    /* scroll hint */
+    .scroll-hint {
+      position: absolute;
+      bottom: 2rem; left: 50%;
+      transform: translateX(-50%);
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: .5rem;
+      opacity: 0;
+      animation: fade-up .6s var(--ease-out) 1.5s forwards;
+    }
+    .scroll-hint span {
+      font-size: .65rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.25);
+    }
+    .scroll-arrow {
+      width: 18px; height: 18px;
+      border-right: 1.5px solid rgba(255,255,255,.25);
+      border-bottom: 1.5px solid rgba(255,255,255,.25);
+      transform: rotate(45deg);
+      animation: arrow-bounce 2s ease-in-out infinite;
+    }
+    @keyframes arrow-bounce {
+      0%,100% { transform: rotate(45deg) translate(0,0); }
+      50%      { transform: rotate(45deg) translate(3px,3px); }
+    }
+
+    /* ════════════════════════════════
+       GENERIC SECTION SHELL
+    ════════════════════════════════ */
+    .page-section {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      background: #000;
+    }
+
+    .sec-bg {
+      position: absolute;
+      inset: -15%;
+      background-size: cover;
+      background-position: center;
+      opacity: .32;
+      will-change: transform;
+    }
+
+    .sec-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(10,8,20,.48) 0%, rgba(10,8,20,.62) 100%);
+    }
+
+    .sec-inner {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      max-width: 1100px;
+      padding: 8rem 2.5rem;
+      margin: 0 auto;
+    }
+
+    /* ── typography ── */
+    .eyebrow {
+      font-size: .7rem;
+      font-weight: 600;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--purple-light);
+      margin-bottom: 1rem;
+    }
+
+    .display {
+      font-size: clamp(2.8rem, 6vw, 5.5rem);
+      font-weight: 800;
+      letter-spacing: -2.5px;
+      line-height: 1.02;
+      color: #fff;
+      margin-bottom: 1.4rem;
+    }
+
+    .body-copy {
+      font-size: 1.05rem;
+      font-weight: 300;
+      color: var(--muted);
+      line-height: 1.85;
+      max-width: 520px;
+      margin-bottom: 2.5rem;
+    }
+
+    /* ── glow divider ── */
+    .glow-rule {
+      width: 44px; height: 2px;
+      background: linear-gradient(90deg, var(--purple), var(--cyan));
+      border-radius: 2px;
+      margin: 1.1rem 0 2rem;
+      box-shadow: 0 0 14px rgba(145,70,255,.6);
+    }
+    .center .glow-rule { margin-left: auto; margin-right: auto; }
+
+    /* ── scroll reveal ── */
+    .ri {
+      opacity: 0;
+      transform: translateY(36px);
+      transition: opacity .95s var(--ease-out), transform .95s var(--ease-out);
+    }
+    .ri.visible { opacity: 1; transform: none; }
+    .ri:nth-child(1) { transition-delay: 0s; }
+    .ri:nth-child(2) { transition-delay: .08s; }
+    .ri:nth-child(3) { transition-delay: .16s; }
+    .ri:nth-child(4) { transition-delay: .24s; }
+    .ri:nth-child(5) { transition-delay: .32s; }
+    .ri:nth-child(6) { transition-delay: .40s; }
+
+    /* ════════════════════════════════
+       TWITCH SECTION
+    ════════════════════════════════ */
+    #twitch { background: #0e0e18; }
+
+    .twitch-layout {
+      display: grid;
+      grid-template-columns: 1fr 1.5fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      background: rgba(255,255,255,.05);
+      border: 1px solid rgba(255,255,255,.09);
+      border-radius: 980px;
+      padding: .38rem 1rem;
+      font-size: .76rem;
+      color: rgba(255,255,255,.4);
+      margin-bottom: 2rem;
+      transition: background .5s, border-color .5s, color .5s;
+    }
+    .status-pill.is-online {
+      background: rgba(255,0,68,.07);
+      border-color: rgba(255,0,68,.25);
+      color: #ff7090;
+    }
+
+    .status-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: #383838;
+      flex-shrink: 0;
+      transition: background .4s;
+    }
+    .status-dot.online {
+      background: #f04;
+      animation: pulse-dot 1.6s infinite;
+    }
+    @keyframes pulse-dot {
+      0%,100% { box-shadow: 0 0 0 0 rgba(255,0,68,.5); }
+      50%      { box-shadow: 0 0 0 6px rgba(255,0,68,0); }
+    }
+
+    .twitch-player-wrap {
+      aspect-ratio: 16/9;
+      border-radius: 20px;
+      overflow: hidden;
+      background: #0a0010;
+      border: 1px solid rgba(255,255,255,.06);
+      box-shadow:
+        0 0 0 1px rgba(145,70,255,.08),
+        0 40px 100px rgba(0,0,0,.7),
+        0 0 100px rgba(145,70,255,.08);
+    }
+
+    #twitch-embed,
+    #twitch-embed iframe {
+      width: 100% !important;
+      height: 100% !important;
+      display: block;
+    }
+
+    /* ════════════════════════════════
+       CUERVOBOT — STICKY SCROLL
+    ════════════════════════════════ */
+    #cuervobot-track {
+      position: relative;
+      height: 280vh;
+    }
+
+    #cuervobot {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow: hidden;
+      background: #0a0a14;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #cuervobot .sec-bg {
+      background-image: url('https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=1800&q=80');
+      opacity: 0;
+      transition: opacity 1.2s var(--ease-out);
+    }
+    #cuervobot.active .sec-bg { opacity: .13; }
+
+    .cuervo-inner {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      padding: 2rem;
+      max-width: 740px;
+    }
+
+    /* each element animates in via .active class + transition-delay */
+    .cv { opacity: 0; transform: translateY(32px); transition: opacity .9s var(--ease-out), transform .9s var(--ease-out); }
+    #cuervobot.active .cv { opacity: 1; transform: none; }
+
+    .cv-tag  { transition-delay: 0s; }
+    .cv-h2   { transition-delay: .08s; }
+    .cv-desc { transition-delay: .18s; }
+    .cv-f0   { transition-delay: .30s; }
+    .cv-f1   { transition-delay: .38s; }
+    .cv-f2   { transition-delay: .46s; }
+    .cv-f3   { transition-delay: .54s; }
+    .cv-dl   { transition-delay: .66s; }
+
+    .app-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: .4rem;
+      font-size: .68rem;
+      font-weight: 600;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--cyan);
+      margin-bottom: 1.2rem;
+    }
+
+    .cuervo-title {
+      font-size: clamp(3.5rem, 9vw, 7rem);
+      font-weight: 800;
+      letter-spacing: -3.5px;
+      line-height: .95;
+      color: #fff;
+      margin-bottom: 1.6rem;
+    }
+    .cuervo-title .grad {
+      background: linear-gradient(135deg, #fff 30%, var(--cyan) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .cuervo-desc {
+      font-size: 1.1rem;
+      font-weight: 300;
+      color: rgba(255,255,255,.45);
+      line-height: 1.8;
+      max-width: 560px;
+      margin: 0 auto 3rem;
+    }
+
+    .feat-grid {
+      display: flex;
+      gap: .7rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 3rem;
+    }
+
+    .feat-chip {
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 12px;
+      padding: .65rem 1.2rem;
+      font-size: .82rem;
+      font-weight: 400;
+      color: rgba(255,255,255,.55);
+      transition: background .25s, border-color .25s, color .25s;
+    }
+    .feat-chip:hover {
+      background: rgba(145,70,255,.12);
+      border-color: rgba(145,70,255,.3);
+      color: #fff;
+    }
+
+    .cuervo-dl {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: .5rem;
+    }
+    .cuervo-dl small {
+      font-size: .72rem;
+      color: rgba(255,255,255,.2);
+    }
+
+    /* ════════════════════════════════
+       SOCIALS
+    ════════════════════════════════ */
+    #socials { background: #0e0e18; }
+    .center { text-align: center; }
+    .center .body-copy { margin-left: auto; margin-right: auto; }
+
+    .socials-grid {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 2.5rem;
+    }
+
+    .social-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: .6rem;
+      background: rgba(255,255,255,.03);
+      border: 1px solid rgba(255,255,255,.07);
+      border-radius: 22px;
+      padding: 2rem 1.8rem;
+      text-decoration: none;
+      color: #fff;
+      min-width: 145px;
+      position: relative;
+      overflow: hidden;
+      transition: border-color .4s var(--ease-out), transform .4s var(--ease-out),
+                  box-shadow .4s var(--ease-out), background .4s;
+    }
+
+    .social-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 50% 0%, rgba(145,70,255,.18), transparent 70%);
+      opacity: 0;
+      transition: opacity .4s;
+    }
+
+    .social-card:hover {
+      border-color: rgba(145,70,255,.4);
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 24px 70px rgba(0,0,0,.5), 0 0 50px rgba(145,70,255,.1);
+    }
+    .social-card:hover::before { opacity: 1; }
+
+    .social-card svg { width: 34px; height: 34px; position: relative; transition: transform .3s; }
+    .social-card:hover svg { transform: scale(1.12); }
+    .social-card strong { font-size: .92rem; font-weight: 500; position: relative; }
+    .social-card span   { font-size: .75rem; color: rgba(255,255,255,.32); position: relative; }
+
+    /* ════════════════════════════════
+       CONTACT
+    ════════════════════════════════ */
+    #contact { background: #000; }
+
+    .contact-form {
+      display: flex;
+      flex-direction: column;
+      gap: .85rem;
+      margin-top: 2.5rem;
+    }
+    .contact-form input,
+    .contact-form textarea {
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(255,255,255,.09);
+      border-radius: 14px;
+      padding: .9rem 1.2rem;
+      color: #fff;
+      font-family: inherit;
+      font-size: .95rem;
+      font-weight: 300;
+      outline: none;
+      width: 100%;
+      transition: border-color .3s, background .3s;
+    }
+    .contact-form input::placeholder,
+    .contact-form textarea::placeholder { color: rgba(255,255,255,.2); }
+    .contact-form input:focus,
+    .contact-form textarea:focus {
+      border-color: rgba(145,70,255,.5);
+      background: rgba(145,70,255,.04);
+    }
+    .contact-form textarea { height: 130px; resize: vertical; }
+
+    /* ════════════════════════════════
+       FOOTER
+    ════════════════════════════════ */
+    footer {
+      text-align: center;
+      padding: 3rem 2rem;
+      color: rgba(255,255,255,.18);
+      font-size: .78rem;
+      border-top: 1px solid rgba(255,255,255,.05);
+    }
+    footer span { color: var(--purple-light); }
+
+    /* ════════════════════════════════
+       RESPONSIVE
+    ════════════════════════════════ */
+    @media (max-width: 820px) {
+      .twitch-layout {
+        grid-template-columns: 1fr;
+      }
+      nav ul { gap: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── NAV ── -->
+  <nav id="main-nav">
+    <a href="#hero" class="nav-logo">Miguel<span>Angel</span>_45</a>
+    <ul>
+      <li><a href="#twitch">Twitch</a></li>
+      <li><a href="#cuervobot-track">CuervoBot</a></li>
+      <li><a href="#socials">Redes</a></li>
+      <li><a href="#contact">Contacto</a></li>
+    </ul>
+  </nav>
+
+  <!-- ════════════════════════════════
+       HERO
+  ════════════════════════════════ -->
+  <section id="hero">
+    <div id="hero-bg"></div>
+    <div id="hero-overlay"></div>
+
+    <div class="hero-content">
+      <p class="hero-eyebrow">Streamer &amp; Developer</p>
+      <h1 class="hero-title">Miguel<span class="grad">Angel</span><br>_45</h1>
+      <p class="hero-sub">Streams en vivo, contenido gamer y proyectos de software.<br>Bienvenido a mi espacio digital.</p>
+      <div class="hero-actions">
+        <a href="#twitch" class="btn btn-primary">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M11.64 5.93H13.07V10.21H11.64M15.57 5.93H17V10.21H15.57M7 2L3.43 5.57V18.43H7.71V22L11.29 18.43H14.14L20.57 12V2M19.14 11.29L16.29 14.14H13.43L10.93 16.64V14.14H7.71V3.43H19.14Z"/></svg>
+          Ver en Twitch
+        </a>
+        <a href="#cuervobot-track" class="btn btn-glass">CuervoBot ↓</a>
+      </div>
+    </div>
+
+    <div class="scroll-hint">
+      <span>Scroll</span>
+      <div class="scroll-arrow"></div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════
+       TWITCH
+  ════════════════════════════════ -->
+  <section class="page-section" id="twitch">
+    <div class="sec-bg" style="background-image:url('https://images.unsplash.com/photo-1538481199705-c710c4e965fc?w=1800&q=80')"></div>
+    <div class="sec-overlay"></div>
+
+    <div class="sec-inner">
+      <div class="twitch-layout">
+
+        <!-- left col -->
+        <div>
+          <div class="status-pill" id="twitch-status-card">
+            <span class="status-dot offline" id="status-dot"></span>
+            <span id="status-text">Desconectado</span>
+          </div>
+          <p class="eyebrow ri">Live Streaming</p>
+          <h2 class="display ri">Twitch<br><span class="grad">Channel</span></h2>
+          <div class="glow-rule ri"></div>
+          <p class="body-copy ri">
+            Únete al stream para partidas en vivo, clips épicos y una comunidad en constante crecimiento. Desde FPS competitivos hasta juegos de estrategia — el contenido nunca para.
+          </p>
+          <a href="https://www.twitch.tv/miguelangel_45" target="_blank" rel="noopener" class="btn btn-primary ri">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M11.64 5.93H13.07V10.21H11.64M15.57 5.93H17V10.21H15.57M7 2L3.43 5.57V18.43H7.71V22L11.29 18.43H14.14L20.57 12V2M19.14 11.29L16.29 14.14H13.43L10.93 16.64V14.14H7.71V3.43H19.14Z"/></svg>
+            Ir al Canal
+          </a>
+        </div>
+
+        <!-- right col: player -->
+        <div class="ri">
+          <div class="twitch-player-wrap">
+            <div id="twitch-embed"></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════
+       CUERVOBOT — sticky scroll
+  ════════════════════════════════ -->
+  <div id="cuervobot-track">
+    <section id="cuervobot">
+      <div class="sec-bg"></div>
+      <div class="sec-overlay" style="background:linear-gradient(180deg,rgba(8,6,18,.5),rgba(8,6,18,.65))"></div>
+
+      <div class="cuervo-inner">
+        <p class="app-eyebrow cv cv-tag">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+          Aplicación
+        </p>
+        <h2 class="cuervo-title cv cv-h2">Cuervo<span class="grad">Bot</span></h2>
+        <p class="cuervo-desc cv cv-desc">
+          Bot personalizado para Twitch que automatiza la interacción con tu audiencia. Gestiona comandos, lanza alertas, responde a eventos del canal — todo desde una app de escritorio hecha a medida.
+        </p>
+        <div class="feat-grid">
+          <div class="feat-chip cv cv-f0">⚡ Comandos de chat</div>
+          <div class="feat-chip cv cv-f1">🔔 Alertas de eventos</div>
+          <div class="feat-chip cv cv-f2">🤖 Respuestas automáticas</div>
+          <div class="feat-chip cv cv-f3">🖥️ App de escritorio</div>
+        </div>
+        <div class="cuervo-dl cv cv-dl">
+          <span class="btn btn-disabled">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M5 20h14v-2H5v2zm7-18v12.17l-4.59-4.58L6 11l6 6 6-6-1.41-1.41L13 14.17V2h-1z"/></svg>
+            Descargar Installer — Próximamente
+          </span>
+          <small>Disponible para Windows pronto. ¡Estate pendiente!</small>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ════════════════════════════════
+       SOCIALS
+  ════════════════════════════════ -->
+  <section class="page-section center" id="socials">
+    <div class="sec-bg" style="background-image:url('https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=1800&q=80')"></div>
+    <div class="sec-overlay"></div>
+
+    <div class="sec-inner center">
+      <p class="eyebrow ri">Encuéntrame en</p>
+      <h2 class="display ri">Redes <span class="grad">Sociales</span></h2>
+      <div class="glow-rule ri"></div>
+      <p class="body-copy ri">Sígueme en mis otras plataformas para no perderte nada del contenido.</p>
+
+      <div class="socials-grid">
+        <a href="https://www.twitch.tv/miguelangel_45" target="_blank" rel="noopener" class="social-card ri">
+          <svg viewBox="0 0 24 24" fill="#9146FF"><path d="M11.64 5.93H13.07V10.21H11.64M15.57 5.93H17V10.21H15.57M7 2L3.43 5.57V18.43H7.71V22L11.29 18.43H14.14L20.57 12V2M19.14 11.29L16.29 14.14H13.43L10.93 16.64V14.14H7.71V3.43H19.14Z"/></svg>
+          <strong>Twitch</strong>
+          <span>miguelangel_45</span>
+        </a>
+        <a href="https://twitter.com/" target="_blank" rel="noopener" class="social-card ri">
+          <svg viewBox="0 0 24 24" fill="#1DA1F2"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+          <strong>Twitter / X</strong>
+          <span>@miguelangel_45</span>
+        </a>
+        <a href="https://youtube.com/" target="_blank" rel="noopener" class="social-card ri">
+          <svg viewBox="0 0 24 24" fill="#FF0000"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+          <strong>YouTube</strong>
+          <span>Próximamente</span>
+        </a>
+        <a href="https://discord.gg/" target="_blank" rel="noopener" class="social-card ri">
+          <svg viewBox="0 0 24 24" fill="#5865F2"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994.021-.04.001-.088-.041-.104a13.201 13.201 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
+          <strong>Discord</strong>
+          <span>Comunidad</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════
+       CONTACT
+  ════════════════════════════════ -->
+  <section class="page-section" id="contact">
+    <div class="sec-bg" style="background-image:url('https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=1800&q=80')"></div>
+    <div class="sec-overlay"></div>
+
+    <div class="sec-inner">
+      <div style="max-width:540px">
+        <p class="eyebrow ri">Hablemos</p>
+        <h2 class="display ri">Con<span class="grad">tacto</span></h2>
+        <div class="glow-rule ri"></div>
+        <p class="body-copy ri">¿Colaboraciones, preguntas sobre CuervoBot o simplemente quieres saludar? Déjame un mensaje y te respondo pronto.</p>
+        <form class="contact-form ri" onsubmit="handleSubmit(event)">
+          <input type="text"  placeholder="Tu nombre"    required />
+          <input type="email" placeholder="Tu email"     required />
+          <textarea           placeholder="Tu mensaje…"  required></textarea>
+          <button type="submit" class="btn btn-primary" style="align-self:flex-start; border:none; cursor:pointer;">
+            Enviar mensaje →
+          </button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>© 2026 <span>MiguelAngel_45</span> — Todos los derechos reservados.</p>
+  </footer>
+
+  <script>
+    // ── Nav: glassmorphism on scroll ──
+    const nav = document.getElementById('main-nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 50);
+    }, { passive: true });
+
+    // ── Parallax: sec-bg elements ──
+    const secBgs = document.querySelectorAll('.sec-bg');
+    function updateParallax() {
+      secBgs.forEach(bg => {
+        const section = bg.closest('.page-section, #cuervobot');
+        if (!section) return;
+        const rect   = section.getBoundingClientRect();
+        const offset = rect.top * 0.22;
+        bg.style.transform = `translateY(${offset}px)`;
+      });
+    }
+    window.addEventListener('scroll', updateParallax, { passive: true });
+    updateParallax();
+
+    // ── Scroll reveal (IntersectionObserver) ──
+    const riEls = document.querySelectorAll('.ri');
+    const riObs = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          riObs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    riEls.forEach(el => riObs.observe(el));
+
+    // ── CuervoBot: sticky scroll progress → animate in ──
+    const cuervoBotTrack   = document.getElementById('cuervobot-track');
+    const cuervoBotSection = document.getElementById('cuervobot');
+
+    function updateCuervo() {
+      const rect     = cuervoBotTrack.getBoundingClientRect();
+      const progress = Math.max(0, Math.min(1, -rect.top / (rect.height - window.innerHeight)));
+      if (progress > 0.04) cuervoBotSection.classList.add('active');
+    }
+    window.addEventListener('scroll', updateCuervo, { passive: true });
+    updateCuervo();
+
+    // ── Twitch Embed + live status ──
+    (function () {
+      const container = document.getElementById('twitch-embed');
+      const dot       = document.getElementById('status-dot');
+      const statusTxt = document.getElementById('status-text');
+      const pill      = document.getElementById('twitch-status-card');
+
+      function setOnline() {
+        dot.className    = 'status-dot online';
+        statusTxt.textContent = '● En vivo ahora';
+        pill.classList.add('is-online');
+      }
+      function setOffline() {
+        dot.className    = 'status-dot offline';
+        statusTxt.textContent = 'Desconectado';
+        pill.classList.remove('is-online');
+      }
+
+      // file:// fallback
+      if (window.location.protocol === 'file:') {
+        container.innerHTML = `
+          <div style="width:100%;height:100%;display:flex;flex-direction:column;
+            align-items:center;justify-content:center;gap:1.2rem;
+            background:linear-gradient(135deg,#07000f,#020010);
+            font-family:inherit;text-align:center;padding:2rem;">
+            <svg width="46" height="46" viewBox="0 0 24 24" fill="#9146FF">
+              <path d="M11.64 5.93H13.07V10.21H11.64M15.57 5.93H17V10.21H15.57M7 2L3.43 5.57V18.43H7.71V22L11.29 18.43H14.14L20.57 12V2M19.14 11.29L16.29 14.14H13.43L10.93 16.64V14.14H7.71V3.43H19.14Z"/>
+            </svg>
+            <p style="color:rgba(255,255,255,.28);font-size:.82rem;line-height:1.75;max-width:230px;">
+              El player requiere un servidor HTTP.<br>
+              Usa <code style="color:#b87fff">Live Server</code> en VS Code para verlo.
+            </p>
+            <a href="https://www.twitch.tv/miguelangel_45" target="_blank"
+               style="display:inline-flex;align-items:center;gap:.5rem;
+                      padding:.6rem 1.4rem;background:#9146FF;color:#fff;
+                      border-radius:980px;text-decoration:none;font-size:.84rem;font-weight:500;">
+              Abrir en Twitch →
+            </a>
+          </div>`;
+        return;
+      }
+
+      const script = document.createElement('script');
+      script.src   = 'https://embed.twitch.tv/embed/v1.js';
+      script.onload = function () {
+        const embed = new Twitch.Embed('twitch-embed', {
+          width: '100%', height: '100%',
+          channel: 'miguelangel_45',
+          layout: 'video',
+          autoplay: false,
+          muted: true,
+          parent: [window.location.hostname]
+        });
+        embed.addEventListener(Twitch.Embed.VIDEO_READY, function () {
+          const player = embed.getPlayer();
+          player.addEventListener(Twitch.Player.ONLINE,  setOnline);
+          player.addEventListener(Twitch.Player.OFFLINE, setOffline);
+          setTimeout(() => { if (!player.isPaused()) setOnline(); }, 3000);
+        });
+      };
+      document.body.appendChild(script);
+    })();
+
+    // ── Contact form feedback ──
+    function handleSubmit(e) {
+      e.preventDefault();
+      const btn = e.target.querySelector('button[type="submit"]');
+      btn.textContent  = '¡Enviado! ✓';
+      btn.style.background = '#1a9e6e';
+      btn.disabled = true;
+      setTimeout(() => {
+        btn.textContent  = 'Enviar mensaje →';
+        btn.style.background = '';
+        btn.disabled = false;
+        e.target.reset();
+      }, 3000);
+    }
+  </script>
+</body>
+</html>
