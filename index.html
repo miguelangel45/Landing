@@ -97,6 +97,8 @@
     .nav-hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
     @media (max-width: 600px) {
+      .nav-logo-desktop { display: none !important; }
+      .nav-logo-mobile  { display: block !important; }
       .nav-hamburger { display: flex; }
       nav ul {
         display: none;
@@ -694,7 +696,10 @@
 
   <!-- ── NAV ── -->
   <nav id="main-nav">
-    <a href="#hero" class="nav-logo"><img src="nav-logo.webp" alt="MiguelAngel_45" style="height:56px;width:auto;display:block;"></a>
+    <a href="#hero" class="nav-logo">
+      <img src="nav-logo.webp"        alt="MiguelAngel_45" class="nav-logo-desktop" style="height:56px;width:auto;display:block;">
+      <img src="nav-logo-mobile.webp" alt="MiguelAngel_45" class="nav-logo-mobile"  style="height:44px;width:auto;display:none;">
+    </a>
     <button class="nav-hamburger" id="nav-toggle" aria-label="Abrir menú">
       <span></span><span></span><span></span>
     </button>
