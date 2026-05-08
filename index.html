@@ -805,12 +805,13 @@
           <div class="feat-chip cv cv-f2">🤖 Respuestas automáticas</div>
           <div class="feat-chip cv cv-f3">🖥️ App de escritorio</div>
         </div>
-        <div class="cuervo-dl cv cv-dl">
-          <span class="btn btn-disabled">
+        <div class="cuervo-dl cv cv-dl" id="cuervo-download">
+          <a id="dl-btn" href="#" class="btn btn-primary">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M5 20h14v-2H5v2zm7-18v12.17l-4.59-4.58L6 11l6 6 6-6-1.41-1.41L13 14.17V2h-1z"/></svg>
-            Descargar Installer — Próximamente
-          </span>
-          <small>Disponible para Windows pronto. ¡Estate pendiente!</small>
+            <span id="dl-label">Descargar Installer</span>
+          </a>
+          <small id="dl-hint"></small>
+          <a href="https://github.com/miguelangel45/cuervobot_discord/releases" target="_blank" rel="noopener" style="font-size:.72rem;color:rgba(255,255,255,.35);text-decoration:underline;text-underline-offset:3px;">Ver todas las versiones</a>
         </div>
       </div>
     </section>
@@ -930,6 +931,48 @@
     }
     window.addEventListener('scroll', updateCuervo, { passive: true });
     updateCuervo();
+
+    // ── CuervoBot: OS-detect download ──
+    (function () {
+      var REPO = 'https://github.com/miguelangel45/cuervobot_discord/releases';
+      var VERSION = '1.0.0';
+      var files = {
+        windows:  'CuervoBot_Setup_' + VERSION + '.exe',
+        macArm:   'CuervoBot_macOS_arm64.zip',
+        macIntel: 'CuervoBot_macOS_amd64.zip'
+      };
+      var base = REPO + '/download/v' + VERSION + '/';
+
+      var ua = navigator.userAgent.toLowerCase();
+      var platform = navigator.platform || '';
+      var label, url, hint;
+
+      if (/win/.test(platform.toLowerCase())) {
+        label = 'Descargar para Windows';
+        url   = base + files.windows;
+        hint  = 'Windows installer (.exe)';
+      } else if (/mac/i.test(platform)) {
+        var isArm = /arm64|aarch64/.test(ua) ||
+                    (navigator.userAgentData && navigator.userAgentData.architecture === 'arm');
+        if (isArm) {
+          label = 'Descargar para macOS (Apple Silicon)';
+          url   = base + files.macArm;
+          hint  = 'macOS Apple Silicon (.zip)';
+        } else {
+          label = 'Descargar para macOS (Intel)';
+          url   = base + files.macIntel;
+          hint  = 'macOS Intel (.zip)';
+        }
+      } else {
+        label = 'Descargar Installer';
+        url   = REPO;
+        hint  = 'Selecciona tu versión en GitHub';
+      }
+
+      document.getElementById('dl-label').textContent = label;
+      document.getElementById('dl-btn').href = url;
+      document.getElementById('dl-hint').textContent = hint;
+    })();
 
     // ── Twitch Embed + live status ──
     (function () {
