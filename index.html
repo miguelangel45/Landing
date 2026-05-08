@@ -934,14 +934,14 @@
 
     // ── CuervoBot: OS-detect download ──
     (function () {
-      var REPO = 'https://github.com/miguelangel45/cuervobot_discord/releases';
-      var VERSION = '1.0.0';
-      var files = {
+      const REPO = 'https://github.com/miguelangel45/cuervobot_discord/releases';
+      const VERSION = '1.0.0';
+      const files = {
         windows:  'CuervoBot_Setup_' + VERSION + '.exe',
         macArm:   'CuervoBot_macOS_arm64.zip',
         macIntel: 'CuervoBot_macOS_amd64.zip'
       };
-      var base = REPO + '/download/v' + VERSION + '/';
+      const base = REPO + '/download/v' + VERSION + '/';
 
       function apply(label, url, hint) {
         document.getElementById('dl-label').textContent = label;
@@ -949,21 +949,26 @@
         document.getElementById('dl-hint').textContent = hint;
       }
 
-      var platform = (navigator.platform || '').toLowerCase();
-      var isMobileTouchDevice = navigator.maxTouchPoints > 1;
+      const platform = (navigator.platform || '').toLowerCase();
+      const isIPadOS = platform === 'macintel' && navigator.maxTouchPoints > 1;
 
-      if (/win/.test(platform) && !isMobileTouchDevice) {
-        apply('Descargar para Windows', base + files.windows, 'Windows installer (.exe)');
-      } else if (/mac/.test(platform) && !isMobileTouchDevice) {
-        apply('Descargar para macOS', base + files.macIntel, 'macOS Intel (.zip)');
-        if (navigator.userAgentData && navigator.userAgentData.getHighEntropyValues) {
+      if (/win/.test(platform)) {
+        apply('Descargar para Windows', base + files.windows, 'Instalador Windows (.exe)');
+      } else if (/mac/.test(platform) && !isIPadOS) {
+        const canDetectArch = navigator.userAgentData && navigator.userAgentData.getHighEntropyValues;
+        if (canDetectArch) {
+          apply('Descargar para macOS', REPO, 'Detectando arquitectura…');
           navigator.userAgentData.getHighEntropyValues(['architecture']).then(function (vals) {
             if (vals.architecture === 'arm') {
               apply('Descargar para macOS (Apple Silicon)', base + files.macArm, 'macOS Apple Silicon (.zip)');
             } else {
               apply('Descargar para macOS (Intel)', base + files.macIntel, 'macOS Intel (.zip)');
             }
-          }).catch(function () {});
+          }).catch(function () {
+            apply('Descargar para macOS', REPO, 'Elige tu versión en GitHub');
+          });
+        } else {
+          apply('Descargar para macOS', REPO, 'Elige tu versión en GitHub (Apple Silicon / Intel)');
         }
       } else {
         apply('Descargar Installer', REPO, 'Selecciona tu versión en GitHub');
