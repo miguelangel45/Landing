@@ -806,7 +806,7 @@
           <div class="feat-chip cv cv-f2">🤖 Respuestas automáticas</div>
           <div class="feat-chip cv cv-f3">🖥️ App de escritorio</div>
         </div>
-        <div class="cuervo-dl cv cv-dl" id="cuervo-download">
+        <div class="cuervo-dl cv cv-dl">
           <a id="dl-btn" href="https://github.com/miguelangel45/cuervobot_discord/releases" class="btn btn-primary">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M5 20h14v-2H5v2zm7-18v12.17l-4.59-4.58L6 11l6 6 6-6-1.41-1.41L13 14.17V2h-1z"/></svg>
             <span id="dl-label">Descargar instalador</span>
@@ -969,7 +969,7 @@
               apply('Descargar para macOS (Intel)', LATEST + files.macIntel, 'macOS Intel (.zip)');
             }
           }).catch(function () {
-            apply('Descargar para macOS', RELEASES, 'Elige tu versión en GitHub');
+            apply('Descargar para macOS', RELEASES, 'Elige tu versión en GitHub (Apple Silicon / Intel)');
           });
         } else {
           apply('Descargar para macOS', RELEASES, 'Elige tu versión en GitHub (Apple Silicon / Intel)');
