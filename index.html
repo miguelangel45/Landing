@@ -806,7 +806,7 @@
           <div class="feat-chip cv cv-f3">🖥️ App de escritorio</div>
         </div>
         <div class="cuervo-dl cv cv-dl" id="cuervo-download">
-          <a id="dl-btn" href="#" class="btn btn-primary">
+          <a id="dl-btn" href="https://github.com/miguelangel45/cuervobot_discord/releases" class="btn btn-primary">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M5 20h14v-2H5v2zm7-18v12.17l-4.59-4.58L6 11l6 6 6-6-1.41-1.41L13 14.17V2h-1z"/></svg>
             <span id="dl-label">Descargar Installer</span>
           </a>
@@ -943,35 +943,31 @@
       };
       var base = REPO + '/download/v' + VERSION + '/';
 
-      var ua = navigator.userAgent.toLowerCase();
-      var platform = navigator.platform || '';
-      var label, url, hint;
-
-      if (/win/.test(platform.toLowerCase())) {
-        label = 'Descargar para Windows';
-        url   = base + files.windows;
-        hint  = 'Windows installer (.exe)';
-      } else if (/mac/i.test(platform)) {
-        var isArm = /arm64|aarch64/.test(ua) ||
-                    (navigator.userAgentData && navigator.userAgentData.architecture === 'arm');
-        if (isArm) {
-          label = 'Descargar para macOS (Apple Silicon)';
-          url   = base + files.macArm;
-          hint  = 'macOS Apple Silicon (.zip)';
-        } else {
-          label = 'Descargar para macOS (Intel)';
-          url   = base + files.macIntel;
-          hint  = 'macOS Intel (.zip)';
-        }
-      } else {
-        label = 'Descargar Installer';
-        url   = REPO;
-        hint  = 'Selecciona tu versión en GitHub';
+      function apply(label, url, hint) {
+        document.getElementById('dl-label').textContent = label;
+        document.getElementById('dl-btn').href = url;
+        document.getElementById('dl-hint').textContent = hint;
       }
 
-      document.getElementById('dl-label').textContent = label;
-      document.getElementById('dl-btn').href = url;
-      document.getElementById('dl-hint').textContent = hint;
+      var platform = (navigator.platform || '').toLowerCase();
+      var isMobileTouchDevice = navigator.maxTouchPoints > 1;
+
+      if (/win/.test(platform) && !isMobileTouchDevice) {
+        apply('Descargar para Windows', base + files.windows, 'Windows installer (.exe)');
+      } else if (/mac/.test(platform) && !isMobileTouchDevice) {
+        apply('Descargar para macOS', base + files.macIntel, 'macOS Intel (.zip)');
+        if (navigator.userAgentData && navigator.userAgentData.getHighEntropyValues) {
+          navigator.userAgentData.getHighEntropyValues(['architecture']).then(function (vals) {
+            if (vals.architecture === 'arm') {
+              apply('Descargar para macOS (Apple Silicon)', base + files.macArm, 'macOS Apple Silicon (.zip)');
+            } else {
+              apply('Descargar para macOS (Intel)', base + files.macIntel, 'macOS Intel (.zip)');
+            }
+          }).catch(function () {});
+        }
+      } else {
+        apply('Descargar Installer', REPO, 'Selecciona tu versión en GitHub');
+      }
     })();
 
     // ── Twitch Embed + live status ──
