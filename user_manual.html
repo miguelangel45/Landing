@@ -95,6 +95,29 @@
 
   .sidebar-link .icon { font-size: 15px; min-width: 18px; text-align: center; }
 
+  /* Language switcher */
+  .lang-switcher {
+    display: flex;
+    gap: 6px;
+    padding: 12px 20px 0;
+    margin-top: 8px;
+    border-top: 1px solid var(--border);
+  }
+  .lang-btn {
+    flex: 1;
+    text-align: center;
+    padding: 5px 0;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 700;
+    text-decoration: none;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    transition: all .15s;
+  }
+  .lang-btn:hover { border-color: var(--primary-light); color: #fff; }
+  .lang-btn.active { background: var(--primary); border-color: var(--primary); color: #fff; }
+
   /* ── MAIN CONTENT ────────────────────────────────── */
   #content {
     margin-left: var(--sidebar-w);
@@ -571,6 +594,11 @@
     </div>
   </div>
 
+  <div class="lang-switcher">
+    <a href="user_manual.html" class="lang-btn active">🇺🇸 EN</a>
+    <a href="user_manual_es.html" class="lang-btn">🇲🇽 ES</a>
+  </div>
+
   <div class="sidebar-section-label">Getting Started</div>
   <a href="#overview"    class="sidebar-link"><span class="icon">🏠</span> Overview</a>
   <a href="#quickstart"  class="sidebar-link"><span class="icon">🚀</span> Quick Start</a>
@@ -596,6 +624,7 @@
 
   <div class="sidebar-section-label">Overlays & OBS</div>
   <a href="#overlays"    class="sidebar-link"><span class="icon">🖥️</span> OBS Overlays</a>
+  <a href="#overlay-all" class="sidebar-link"><span class="icon">🎬</span> All-in-One Overlay</a>
   <a href="#nowplaying"  class="sidebar-link"><span class="icon">🎶</span> Now Playing Widget</a>
   <a href="#catwidget"   class="sidebar-link"><span class="icon">🎨</span> Category Widget</a>
 </nav>
@@ -1614,14 +1643,102 @@
     <h3 style="font-size:16px;color:#fff;margin:28px 0 14px;">Available overlay pages</h3>
 
     <table>
-      <thead><tr><th>Overlay</th><th>Tab to find it</th><th>What it shows</th></tr></thead>
+      <thead><tr><th>Overlay</th><th>URL / where to find it</th><th>What it shows</th></tr></thead>
       <tbody>
-        <tr><td>Alert Overlay</td><td>Alerts → Open Overlay</td><td>Media/animations for follows, subs, raids, bits, etc.</td></tr>
-        <tr><td>Reward Overlay</td><td>Alerts → reward card editor</td><td>Media animation when a specific reward is redeemed</td></tr>
+        <tr>
+          <td><strong>All-in-One Overlay</strong> ⭐</td>
+          <td>Alerts → <em>Open Overlay</em> button<br><code style="font-size:11px;">/overlay/all</code></td>
+          <td>Plays <strong>all rewards + all alerts</strong> in one queued browser source — the recommended single source to add to OBS</td>
+        </tr>
+        <tr><td>Per-Reward Overlay</td><td>Alerts → individual reward card editor</td><td>Plays media only for one specific reward ID</td></tr>
         <tr><td>Now Playing</td><td>Spotify → Now Playing tab</td><td>Current Spotify track, artist, album art</td></tr>
         <tr><td>Category Change Widget</td><td>Game Detector → Configure Overlay</td><td>On-screen announcement when Twitch category changes</td></tr>
       </tbody>
     </table>
+  </section>
+
+  <!-- ─────────────────── ALL-IN-ONE OVERLAY ───────────────────────── -->
+  <section class="section" id="overlay-all">
+    <div class="section-header">
+      <div class="section-icon icon-purple">🎬</div>
+      <div class="section-title-wrap">
+        <h2>All-in-One Overlay <span class="badge badge-new">Recommended</span></h2>
+        <p>A single OBS Browser Source that plays every reward animation and every channel alert — automatically queued so nothing overlaps.</p>
+      </div>
+    </div>
+
+    <p style="font-size:14px;color:var(--text-muted);margin-bottom:24px;">
+      Instead of adding a separate Browser Source for each reward or alert, the All-in-One Overlay handles everything in one place. When multiple events fire at the same time, it queues them and plays each one in order, so your viewers never miss an animation.
+    </p>
+
+    <div class="callout">
+      <strong>This is the URL behind the "🖥️ Open Overlay" button</strong><br>
+      Clicking <em>Open Overlay</em> in the Alerts tab or in any reward editor opens this same overlay at <code>http://localhost:PORT/overlay/all</code>. Copy that URL and add it as a Browser Source in OBS — you only need <strong>one</strong> Browser Source for all your rewards and alerts combined.
+    </div>
+
+    <div class="feature-grid" style="margin-top:24px;">
+      <div class="feature-card">
+        <h4>🏆 All Reward Animations</h4>
+        <p>When any channel-point reward is redeemed, this overlay looks up that reward's configured media (video, GIF, image, audio) and plays it automatically.</p>
+      </div>
+      <div class="feature-card">
+        <h4>🔔 All Channel Alerts</h4>
+        <p>Follows, subscriptions, re-subs, gift subs, bits, raids, and gigantify-emote events all play through the same overlay using their individually configured media.</p>
+      </div>
+      <div class="feature-card">
+        <h4>📋 Built-in Queue</h4>
+        <p>If a raid happens while a reward animation is playing, the raid alert waits its turn. Events are queued up to 50 deep and played one after another with no overlap.</p>
+      </div>
+      <div class="feature-card">
+        <h4>🔄 Live Config Refresh</h4>
+        <p>Media configurations are re-fetched before each animation plays, so any changes you make in the editor take effect immediately — no need to reload the OBS source.</p>
+      </div>
+    </div>
+
+    <h3 style="font-size:16px;color:#fff;margin:28px 0 14px;">How to set it up</h3>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <h4>Configure your reward and alert media</h4>
+          <p>In the <strong>Alerts</strong> tab, set a media URL and duration for each alert type (follow, sub, bits, etc.). In the reward editor, assign media to each reward. The all-in-one overlay plays whatever you configured per-event.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <h4>Click "🖥️ Open Overlay" in the Alerts tab</h4>
+          <p>A new browser tab opens showing the overlay page. Copy the URL from the address bar — it will look like <code>http://localhost:PORT/overlay/all</code>.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <h4>Add it as a Browser Source in OBS</h4>
+          <p>In OBS: <strong>Sources → + → Browser</strong>. Paste the URL, set width/height to your stream resolution (1920×1080), and check <strong>"Shutdown source when not visible"</strong> so it doesn't play while off-screen.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-content">
+          <h4>Test it</h4>
+          <p>Trigger a test by redeeming a channel-point reward or having someone follow your channel. The animation should appear directly in OBS within a second.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="tooltip-box tip-success">
+      <span class="tip-icon">✅</span>
+      <div><strong>One source is enough</strong>
+        You do <em>not</em> need separate Browser Sources for rewards and alerts. The All-in-One Overlay handles both. Only add individual per-reward overlays if you need a specific reward to appear at a different position on screen.</div>
+    </div>
+
+    <div class="tooltip-box tip-warning">
+      <span class="tip-icon">⚠️</span>
+      <div><strong>CuervoBot must be running</strong>
+        The overlay only receives events while CuervoBot is open. Always launch CuervoBot before starting your stream and before OBS loads the browser source.</div>
+    </div>
   </section>
 
   <!-- ─────────────────── NOW PLAYING ──────────────────────────── -->

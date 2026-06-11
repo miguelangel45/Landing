@@ -10,6 +10,7 @@ FROM nginx:alpine
 # Copy the landing page and assets
 COPY index.html /usr/share/nginx/html/index.html
 COPY user_manual.html /usr/share/nginx/html/user_manual.html
+COPY user_manual_es.html /usr/share/nginx/html/user_manual_es.html
 COPY *.png *.svg *.webp /usr/share/nginx/html/
 
 # Copy the config server binary
@@ -36,6 +37,10 @@ RUN printf 'server {\n\
         add_header Cache-Control "no-cache";\n\
     }\n\
     location = /user_manual.html {\n\
+        expires -1;\n\
+        add_header Cache-Control "no-cache";\n\
+    }\n\
+    location = /user_manual_es.html {\n\
         expires -1;\n\
         add_header Cache-Control "no-cache";\n\
     }\n\
