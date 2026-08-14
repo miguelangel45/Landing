@@ -938,14 +938,14 @@
     window.addEventListener('scroll', updateCuervo, { passive: true });
     updateCuervo();
 
-    // ── CuervoBot: OS-detect download ──
+    // ── CuervoBot: OS-detect download (resolves latest asset via GitHub API) ──
     (function () {
       const RELEASES = 'https://github.com/miguelangel45/CuervoBot/releases';
-      const LATEST   = RELEASES + '/latest/download/';
-      const files = {
-        windows:  'CuervoBot_Setup_1.0.0.exe',
-        macArm:   'CuervoBot_macOS_arm64.zip',
-        macIntel: 'CuervoBot_macOS_amd64.zip'
+      const API      = 'https://api.github.com/repos/miguelangel45/CuervoBot/releases/latest';
+      const patterns = {
+        windows:  /CuervoBot_Setup.*\.exe$/i,
+        macArm:   /macOS_arm64\.zip$/i,
+        macIntel: /macOS_amd64\.zip$/i
       };
 
       const elLabel = document.getElementById('dl-label');
@@ -958,30 +958,69 @@
         elHint.textContent = hint;
       }
 
+      function findAsset(release, pattern) {
+        const asset = (release.assets || []).find(function (a) { return pattern.test(a.name); });
+        return asset ? asset.browser_download_url : null;
+      }
+
       const platform = (navigator.platform || '').toLowerCase();
       const isIPadOS = platform === 'macintel' && navigator.maxTouchPoints > 1;
+      const isWin    = /win/.test(platform);
+      const isMac    = /mac/.test(platform) && !isIPadOS;
 
-      if (/win/.test(platform)) {
-        apply('Descargar para Windows', LATEST + files.windows, 'Instalador Windows (.exe)');
-      } else if (/mac/.test(platform) && !isIPadOS) {
-        const canDetectArch = navigator.userAgentData && navigator.userAgentData.getHighEntropyValues;
-        if (canDetectArch) {
-          apply('Descargar para macOS', RELEASES, 'Detectando arquitectura…');
-          navigator.userAgentData.getHighEntropyValues(['architecture']).then(function (vals) {
-            if (vals.architecture === 'arm') {
-              apply('Descargar para macOS (Apple Silicon)', LATEST + files.macArm, 'macOS Apple Silicon (.zip)');
-            } else {
-              apply('Descargar para macOS (Intel)', LATEST + files.macIntel, 'macOS Intel (.zip)');
-            }
-          }).catch(function () {
-            apply('Descargar para macOS', RELEASES, 'Elige tu versión en GitHub (Apple Silicon / Intel)');
-          });
-        } else {
-          apply('Descargar para macOS', RELEASES, 'Elige tu versión en GitHub (Apple Silicon / Intel)');
-        }
-      } else {
+      if (!isWin && !isMac) {
         apply('Descargar instalador', RELEASES, 'Selecciona tu versión en GitHub');
+        return;
       }
+
+      apply(
+        isWin ? 'Descargar para Windows' : 'Descargar para macOS',
+        RELEASES,
+        'Buscando última versión…'
+      );
+
+      function macFallback() {
+        apply('Descargar para macOS', RELEASES, 'Elige tu versión en GitHub (Apple Silicon / Intel)');
+      }
+
+      fetch(API)
+        .then(function (r) { return r.ok ? r.json() : Promise.reject(r.status); })
+        .then(function (release) {
+          if (isWin) {
+            const url = findAsset(release, patterns.windows);
+            if (url) apply('Descargar para Windows', url, 'Instalador Windows (.exe)');
+            else     apply('Descargar para Windows', RELEASES, 'Elige tu versión en GitHub');
+            return;
+          }
+          const canDetectArch = navigator.userAgentData && navigator.userAgentData.getHighEntropyValues;
+          function chooseMac(arch) {
+            const isArm = arch === 'arm';
+            const url = findAsset(release, isArm ? patterns.macArm : patterns.macIntel);
+            if (url) {
+              apply(
+                isArm ? 'Descargar para macOS (Apple Silicon)' : 'Descargar para macOS (Intel)',
+                url,
+                isArm ? 'macOS Apple Silicon (.zip)' : 'macOS Intel (.zip)'
+              );
+            } else {
+              macFallback();
+            }
+          }
+          if (canDetectArch) {
+            navigator.userAgentData.getHighEntropyValues(['architecture'])
+              .then(function (vals) { chooseMac(vals.architecture); })
+              .catch(macFallback);
+          } else {
+            macFallback();
+          }
+        })
+        .catch(function () {
+          apply(
+            isWin ? 'Descargar para Windows' : 'Descargar para macOS',
+            RELEASES,
+            'Elige tu versión en GitHub'
+          );
+        });
     })();
 
     // ── Twitch Embed + live status ──
