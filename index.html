@@ -808,7 +808,7 @@
           <div class="feat-chip cv cv-f3">🖥️ App de escritorio</div>
         </div>
         <div class="cuervo-dl cv cv-dl">
-          <a id="dl-btn" href="https://github.com/miguelangel45/cuervobot_discord/releases" class="btn btn-primary">
+          <a id="dl-btn" href="https://github.com/miguelangel45/CuervoBot/releases" class="btn btn-primary">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M5 20h14v-2H5v2zm7-18v12.17l-4.59-4.58L6 11l6 6 6-6-1.41-1.41L13 14.17V2h-1z"/></svg>
             <span id="dl-label">Descargar instalador</span>
           </a>
@@ -817,7 +817,7 @@
             Manual de usuario
           </a>
           <small id="dl-hint">Selecciona tu versión en GitHub</small>
-          <a href="https://github.com/miguelangel45/cuervobot_discord/releases" target="_blank" rel="noopener" style="font-size:.72rem;color:rgba(255,255,255,.35);text-decoration:underline;text-underline-offset:3px;">Ver todas las versiones</a>
+          <a href="https://github.com/miguelangel45/CuervoBot/releases" target="_blank" rel="noopener" style="font-size:.72rem;color:rgba(255,255,255,.35);text-decoration:underline;text-underline-offset:3px;">Ver todas las versiones</a>
         </div>
       </div>
     </section>
@@ -938,14 +938,14 @@
     window.addEventListener('scroll', updateCuervo, { passive: true });
     updateCuervo();
 
-    // ── CuervoBot: OS-detect download ──
+    // ── CuervoBot: OS-detect download (resolves latest asset via GitHub API) ──
     (function () {
-      const RELEASES = 'https://github.com/miguelangel45/cuervobot_discord/releases';
-      const LATEST   = RELEASES + '/latest/download/';
-      const files = {
-        windows:  'CuervoBot_Setup.exe',
-        macArm:   'CuervoBot_macOS_arm64.zip',
-        macIntel: 'CuervoBot_macOS_amd64.zip'
+      const RELEASES = 'https://github.com/miguelangel45/CuervoBot/releases';
+      const API      = 'https://api.github.com/repos/miguelangel45/CuervoBot/releases/latest';
+      const patterns = {
+        windows:  /CuervoBot_Setup.*\.exe$/i,
+        macArm:   /macOS_arm64\.zip$/i,
+        macIntel: /macOS_amd64\.zip$/i
       };
 
       const elLabel = document.getElementById('dl-label');
@@ -958,30 +958,69 @@
         elHint.textContent = hint;
       }
 
+      function findAsset(release, pattern) {
+        const asset = (release.assets || []).find(function (a) { return pattern.test(a.name); });
+        return asset ? asset.browser_download_url : null;
+      }
+
       const platform = (navigator.platform || '').toLowerCase();
       const isIPadOS = platform === 'macintel' && navigator.maxTouchPoints > 1;
+      const isWin    = /win/.test(platform);
+      const isMac    = /mac/.test(platform) && !isIPadOS;
 
-      if (/win/.test(platform)) {
-        apply('Descargar para Windows', LATEST + files.windows, 'Instalador Windows (.exe)');
-      } else if (/mac/.test(platform) && !isIPadOS) {
-        const canDetectArch = navigator.userAgentData && navigator.userAgentData.getHighEntropyValues;
-        if (canDetectArch) {
-          apply('Descargar para macOS', RELEASES, 'Detectando arquitectura…');
-          navigator.userAgentData.getHighEntropyValues(['architecture']).then(function (vals) {
-            if (vals.architecture === 'arm') {
-              apply('Descargar para macOS (Apple Silicon)', LATEST + files.macArm, 'macOS Apple Silicon (.zip)');
-            } else {
-              apply('Descargar para macOS (Intel)', LATEST + files.macIntel, 'macOS Intel (.zip)');
-            }
-          }).catch(function () {
-            apply('Descargar para macOS', RELEASES, 'Elige tu versión en GitHub (Apple Silicon / Intel)');
-          });
-        } else {
-          apply('Descargar para macOS', RELEASES, 'Elige tu versión en GitHub (Apple Silicon / Intel)');
-        }
-      } else {
+      if (!isWin && !isMac) {
         apply('Descargar instalador', RELEASES, 'Selecciona tu versión en GitHub');
+        return;
       }
+
+      apply(
+        isWin ? 'Descargar para Windows' : 'Descargar para macOS',
+        RELEASES,
+        'Buscando última versión…'
+      );
+
+      function macFallback() {
+        apply('Descargar para macOS', RELEASES, 'Elige tu versión en GitHub (Apple Silicon / Intel)');
+      }
+
+      fetch(API)
+        .then(function (r) { return r.ok ? r.json() : Promise.reject(r.status); })
+        .then(function (release) {
+          if (isWin) {
+            const url = findAsset(release, patterns.windows);
+            if (url) apply('Descargar para Windows', url, 'Instalador Windows (.exe)');
+            else     apply('Descargar para Windows', RELEASES, 'Elige tu versión en GitHub');
+            return;
+          }
+          const canDetectArch = navigator.userAgentData && navigator.userAgentData.getHighEntropyValues;
+          function chooseMac(arch) {
+            const isArm = arch === 'arm';
+            const url = findAsset(release, isArm ? patterns.macArm : patterns.macIntel);
+            if (url) {
+              apply(
+                isArm ? 'Descargar para macOS (Apple Silicon)' : 'Descargar para macOS (Intel)',
+                url,
+                isArm ? 'macOS Apple Silicon (.zip)' : 'macOS Intel (.zip)'
+              );
+            } else {
+              macFallback();
+            }
+          }
+          if (canDetectArch) {
+            navigator.userAgentData.getHighEntropyValues(['architecture'])
+              .then(function (vals) { chooseMac(vals.architecture); })
+              .catch(macFallback);
+          } else {
+            macFallback();
+          }
+        })
+        .catch(function () {
+          apply(
+            isWin ? 'Descargar para Windows' : 'Descargar para macOS',
+            RELEASES,
+            'Elige tu versión en GitHub'
+          );
+        });
     })();
 
     // ── Twitch Embed + live status ──
