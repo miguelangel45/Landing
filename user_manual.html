@@ -602,7 +602,7 @@
   <div class="sidebar-section-label">Getting Started</div>
   <a href="#overview"    class="sidebar-link"><span class="icon">🏠</span> Overview</a>
   <a href="#quickstart"  class="sidebar-link"><span class="icon">🚀</span> Quick Start</a>
-  <a href="#login"       class="sidebar-link"><span class="icon">🔑</span> Twitch Login</a>
+  <a href="#login"       class="sidebar-link"><span class="icon">🔑</span> Twitch / Kick Login</a>
 
   <div class="sidebar-section-label">Workspace</div>
   <a href="#rewards-tab" class="sidebar-link"><span class="icon">🏆</span> Rewards Feed</a>
@@ -636,7 +636,7 @@
   <div class="cover">
     <div class="cover-badge">Official Documentation</div>
     <h1>CuervoBot</h1>
-    <p class="subtitle">Complete user manual for every feature of your Twitch streaming dashboard</p>
+    <p class="subtitle">Complete user manual for every feature of your Twitch &amp; Kick streaming dashboard</p>
     <div class="cover-meta">
       <span>📅 Version 1.0</span>
       <span>🎯 For Beginners</span>
@@ -650,15 +650,21 @@
       <div class="section-icon icon-purple">🏠</div>
       <div class="section-title-wrap">
         <h2>What is CuervoBot?</h2>
-        <p>Your all-in-one streaming assistant for Twitch — manage rewards, chat, alerts, and overlays from one place.</p>
+        <p>Your all-in-one streaming assistant for Twitch and Kick — manage rewards, chat, alerts, and overlays from one place.</p>
       </div>
     </div>
 
     <p style="color:var(--text-muted);font-size:15px;line-height:1.8;margin-bottom:24px;">
       CuervoBot is a desktop application that runs on your computer while you stream. It connects to your
-      Twitch channel and gives you a live dashboard where you can see chat messages, channel-point reward
+      Twitch or Kick channel and gives you a live dashboard where you can see chat messages, channel-point reward
       redemptions, manage your rewards, and much more — all without leaving your streaming setup.
     </p>
+
+    <div class="tooltip-box tip-info">
+      <span class="tip-icon">🎮</span>
+      <div><strong>Twitch &amp; Kick, same features</strong>
+        CuervoBot fully supports both Twitch and Kick. Every feature in this manual — rewards, alerts, chatbot, TTS, overlays, and Pro features — works identically on both platforms. Just choose your platform when you connect.</div>
+    </div>
 
     <div class="feature-grid">
       <div class="feature-card">
@@ -751,24 +757,30 @@
     <div class="section-header">
       <div class="section-icon icon-green">🔑</div>
       <div class="section-title-wrap">
-        <h2>Twitch Login</h2>
-        <p>CuervoBot uses the official Twitch login — your password is never stored by the app.</p>
+        <h2>Twitch / Kick Login</h2>
+        <p>CuervoBot uses the official Twitch or Kick login — your password is never stored by the app.</p>
       </div>
+    </div>
+
+    <div class="tooltip-box tip-info" style="margin-bottom:20px;">
+      <span class="tip-icon">🎮</span>
+      <div><strong>Pick your platform</strong>
+        CuervoBot works with either Twitch or Kick. The login flow below is identical for both — just choose the matching platform button when connecting. Currently you can connect one platform at a time; simultaneous Twitch + Kick connections are <strong>coming soon</strong> as a Pro feature.</div>
     </div>
 
     <div class="steps">
       <div class="step">
         <div class="step-num">1</div>
         <div class="step-content">
-          <h4>Click "Connect with Twitch"</h4>
-          <p>Look for the purple button in the top-right corner of the dashboard. If you see your profile picture instead, you are already logged in — skip to step 4.</p>
+          <h4>Click "Connect with Twitch" or "Connect with Kick"</h4>
+          <p>Look for the platform buttons in the top-right corner of the dashboard and pick the one for your channel. If you see your profile picture instead, you are already logged in — skip to step 4.</p>
         </div>
       </div>
       <div class="step">
         <div class="step-num">2</div>
         <div class="step-content">
-          <h4>Authorize on Twitch's website</h4>
-          <p>Your default web browser opens the official <strong>twitch.tv</strong> authorization page. Enter your Twitch username and password (if not already logged in), then click <em>Authorize</em>. This grants CuervoBot permission to read your channel data and manage rewards.</p>
+          <h4>Authorize on Twitch's or Kick's website</h4>
+          <p>Your default web browser opens the official <strong>twitch.tv</strong> or <strong>kick.com</strong> authorization page, matching the platform you picked. Enter your username and password (if not already logged in), then click <em>Authorize</em>. This grants CuervoBot permission to read your channel data and manage rewards.</p>
         </div>
       </div>
       <div class="step">
@@ -782,7 +794,7 @@
         <div class="step-num">4</div>
         <div class="step-content">
           <h4>You're connected!</h4>
-          <p>Your profile picture, display name, and <strong>@username</strong> appear in the top-right. The green status dot means the dashboard is receiving live events from Twitch.</p>
+          <p>Your profile picture, display name, and <strong>@username</strong> appear in the top-right. The green status dot means the dashboard is receiving live events from Twitch or Kick.</p>
         </div>
       </div>
     </div>
@@ -815,7 +827,7 @@
     <div class="tooltip-box">
       <span class="tip-icon">🔒</span>
       <div><strong>Your password is safe</strong>
-        CuervoBot never sees or stores your Twitch password. It only receives a temporary access token from Twitch that expires automatically. You can revoke it any time from your Twitch account's Connected Apps settings.</div>
+        CuervoBot never sees or stores your Twitch or Kick password. It only receives a temporary access token from the platform that expires automatically. You can revoke it any time from your Twitch or Kick account's Connected Apps settings.</div>
     </div>
 
     <h3 style="font-size:16px;color:#fff;margin:28px 0 12px;">Logging out</h3>
@@ -1550,8 +1562,14 @@
         <tr><td>AI TTS (ElevenLabs)</td><td>🔒</td><td>✅</td></tr>
         <tr><td>Claude AI Chatbot</td><td>🔒</td><td>✅</td></tr>
         <tr><td>Pro Media Library</td><td>🔒</td><td>✅</td></tr>
+        <tr><td>Connect Twitch + Kick simultaneously</td><td>🔒</td><td>🔜 Coming soon</td></tr>
       </tbody>
     </table>
+
+    <div class="alert alert-warning">
+      <span class="alert-icon">🚧</span>
+      <div><strong>Coming soon to Pro</strong> Right now CuervoBot connects to one platform at a time — Twitch or Kick. The ability to connect to both platforms simultaneously is planned as an upcoming Pro feature.</div>
+    </div>
 
     <h3 style="font-size:16px;color:#fff;margin:28px 0 14px;">Activating your license</h3>
 

@@ -534,7 +534,7 @@
   <div class="sidebar-section-label">Primeros Pasos</div>
   <a href="#overview"    class="sidebar-link"><span class="icon">🏠</span> Descripción general</a>
   <a href="#quickstart"  class="sidebar-link"><span class="icon">🚀</span> Inicio rápido</a>
-  <a href="#login"       class="sidebar-link"><span class="icon">🔑</span> Iniciar sesión con Twitch</a>
+  <a href="#login"       class="sidebar-link"><span class="icon">🔑</span> Iniciar sesión con Twitch / Kick</a>
 
   <div class="sidebar-section-label">Área de trabajo</div>
   <a href="#rewards-tab" class="sidebar-link"><span class="icon">🏆</span> Feed de recompensas</a>
@@ -566,7 +566,7 @@
   <div class="cover">
     <div class="cover-badge">Documentación Oficial</div>
     <h1>CuervoBot</h1>
-    <p class="subtitle">Manual completo de todas las funciones de tu panel de control para streaming en Twitch</p>
+    <p class="subtitle">Manual completo de todas las funciones de tu panel de control para streaming en Twitch y Kick</p>
     <div class="cover-meta">
       <span>📅 Versión 1.0</span>
       <span>🎯 Para principiantes</span>
@@ -580,13 +580,19 @@
       <div class="section-icon icon-purple">🏠</div>
       <div class="section-title-wrap">
         <h2>¿Qué es CuervoBot?</h2>
-        <p>Tu asistente de streaming todo en uno para Twitch — gestiona recompensas, chat, alertas y overlays desde un solo lugar.</p>
+        <p>Tu asistente de streaming todo en uno para Twitch y Kick — gestiona recompensas, chat, alertas y overlays desde un solo lugar.</p>
       </div>
     </div>
 
     <p style="color:var(--text-muted);font-size:15px;line-height:1.8;margin-bottom:24px;">
-      CuervoBot es una aplicación de escritorio que se ejecuta en tu computadora mientras haces stream. Se conecta a tu canal de Twitch y te proporciona un panel en tiempo real donde puedes ver mensajes de chat, canjes de puntos de canal, gestionar recompensas y mucho más — todo sin salir de tu configuración de streaming.
+      CuervoBot es una aplicación de escritorio que se ejecuta en tu computadora mientras haces stream. Se conecta a tu canal de Twitch o Kick y te proporciona un panel en tiempo real donde puedes ver mensajes de chat, canjes de puntos de canal, gestionar recompensas y mucho más — todo sin salir de tu configuración de streaming.
     </p>
+
+    <div class="tooltip-box tip-info">
+      <span class="tip-icon">🎮</span>
+      <div><strong>Twitch y Kick, las mismas funciones</strong>
+        CuervoBot es totalmente compatible con Twitch y Kick. Cada función de este manual — recompensas, alertas, chatbot, TTS, overlays y funciones Pro — funciona igual en ambas plataformas. Solo elige tu plataforma al conectarte.</div>
+    </div>
 
     <div class="feature-grid">
       <div class="feature-card">
@@ -679,24 +685,30 @@
     <div class="section-header">
       <div class="section-icon icon-green">🔑</div>
       <div class="section-title-wrap">
-        <h2>Iniciar sesión con Twitch</h2>
-        <p>CuervoBot usa el inicio de sesión oficial de Twitch — tu contraseña nunca es almacenada por la aplicación.</p>
+        <h2>Iniciar sesión con Twitch / Kick</h2>
+        <p>CuervoBot usa el inicio de sesión oficial de Twitch o Kick — tu contraseña nunca es almacenada por la aplicación.</p>
       </div>
+    </div>
+
+    <div class="tooltip-box tip-info" style="margin-bottom:20px;">
+      <span class="tip-icon">🎮</span>
+      <div><strong>Elige tu plataforma</strong>
+        CuervoBot funciona tanto con Twitch como con Kick. El proceso de inicio de sesión de abajo es idéntico para ambas — solo elige el botón de la plataforma correspondiente al conectarte. Por ahora puedes conectar una plataforma a la vez; la conexión simultánea de Twitch + Kick estará <strong>disponible próximamente</strong> como función Pro.</div>
     </div>
 
     <div class="steps">
       <div class="step">
         <div class="step-num">1</div>
         <div class="step-content">
-          <h4>Haz clic en "Conectar con Twitch"</h4>
-          <p>Busca el botón morado en la esquina superior derecha del panel. Si ya ves tu foto de perfil en su lugar, ya tienes sesión iniciada — salta al paso 4.</p>
+          <h4>Haz clic en "Conectar con Twitch" o "Conectar con Kick"</h4>
+          <p>Busca los botones de plataforma en la esquina superior derecha del panel y elige el de tu canal. Si ya ves tu foto de perfil en su lugar, ya tienes sesión iniciada — salta al paso 4.</p>
         </div>
       </div>
       <div class="step">
         <div class="step-num">2</div>
         <div class="step-content">
-          <h4>Autoriza en el sitio web de Twitch</h4>
-          <p>Tu navegador predeterminado abre la página oficial de autorización de <strong>twitch.tv</strong>. Ingresa tu usuario y contraseña de Twitch (si no tienes sesión activa) y haz clic en <em>Autorizar</em>. Esto le da a CuervoBot permiso para leer los datos de tu canal y gestionar recompensas.</p>
+          <h4>Autoriza en el sitio web de Twitch o Kick</h4>
+          <p>Tu navegador predeterminado abre la página oficial de autorización de <strong>twitch.tv</strong> o <strong>kick.com</strong>, según la plataforma elegida. Ingresa tu usuario y contraseña (si no tienes sesión activa) y haz clic en <em>Autorizar</em>. Esto le da a CuervoBot permiso para leer los datos de tu canal y gestionar recompensas.</p>
         </div>
       </div>
       <div class="step">
@@ -710,7 +722,7 @@
         <div class="step-num">4</div>
         <div class="step-content">
           <h4>¡Ya estás conectado!</h4>
-          <p>Tu foto de perfil, nombre visible y <strong>@usuario</strong> aparecen en la esquina superior derecha. El punto verde de estado indica que el panel está recibiendo eventos en vivo de Twitch.</p>
+          <p>Tu foto de perfil, nombre visible y <strong>@usuario</strong> aparecen en la esquina superior derecha. El punto verde de estado indica que el panel está recibiendo eventos en vivo de Twitch o Kick.</p>
         </div>
       </div>
     </div>
@@ -741,7 +753,7 @@
     <div class="tooltip-box">
       <span class="tip-icon">🔒</span>
       <div><strong>Tu contraseña está segura</strong>
-        CuervoBot nunca ve ni almacena tu contraseña de Twitch. Solo recibe un token de acceso temporal de Twitch que expira automáticamente. Puedes revocarlo en cualquier momento desde la configuración de Aplicaciones Conectadas de tu cuenta de Twitch.</div>
+        CuervoBot nunca ve ni almacena tu contraseña de Twitch o Kick. Solo recibe un token de acceso temporal de la plataforma que expira automáticamente. Puedes revocarlo en cualquier momento desde la configuración de Aplicaciones Conectadas de tu cuenta de Twitch o Kick.</div>
     </div>
 
     <h3 style="font-size:16px;color:#fff;margin:28px 0 12px;">Cerrar sesión</h3>
@@ -1466,8 +1478,14 @@
         <tr><td>IA TTS (ElevenLabs)</td><td>🔒</td><td>✅</td></tr>
         <tr><td>Chatbot IA Claude</td><td>🔒</td><td>✅</td></tr>
         <tr><td>Biblioteca de medios Pro</td><td>🔒</td><td>✅</td></tr>
+        <tr><td>Conectar Twitch + Kick simultáneamente</td><td>🔒</td><td>🔜 Próximamente</td></tr>
       </tbody>
     </table>
+
+    <div class="alert alert-warning">
+      <span class="alert-icon">🚧</span>
+      <div><strong>Próximamente en Pro</strong> Por ahora, CuervoBot se conecta a una plataforma a la vez — Twitch o Kick. La posibilidad de conectarte a ambas plataformas al mismo tiempo está planeada como una futura función Pro.</div>
+    </div>
 
     <h3 style="font-size:16px;color:#fff;margin:28px 0 14px;">Activar tu licencia</h3>
 
